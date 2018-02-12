@@ -1,2 +1,3 @@
-A,C
-A,A
+Bar,Baz
+Bar,Foo
+Foo,Bar

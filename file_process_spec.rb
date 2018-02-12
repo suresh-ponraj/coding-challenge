@@ -1,75 +1,16 @@
-require_relative "file_process.rb"
+require_relative 'file_process.rb'
 
-describe "sort_names" do
+describe 'sort' do
+  it 'order the name by last name followed by first name' do
+    input = File.open('spec_input.txt')
+    output = File.open('output.txt', 'w')
 
-  describe "read" do
+    FileProcess.sort(input, output)
+    output.close
 
-    it "reads the file and creates a hash" do
-
-      reader = File.open("spec_input.txt")
-      names = FileProcess.read(reader)
-
-      expect(names.length).to eq 2
-      expect(names[0][:last_name]).to eq "Bar"
-      expect(names[0][:first_name]).to eq "Foo"
-      expect(names[1][:last_name]).to eq "Bar"
-      expect(names[1][:first_name]).to eq "Baz"
-    end
-
+    expected = File.read('output.txt')
+    expect(expected[0..6].to_s).to eq 'Bar,Baz'
+    expect(expected[8..14].to_s).to eq 'Bar,Foo'
+    expect(expected[16..22].to_s).to eq 'Foo,Bar'
   end
-
-  describe "sort" do
-
-    it "order the name by last name followed by first name" do
-
-      names = [
-        {
-          last_name: "A",
-          first_name: "C"
-        },
-        {
-          last_name: "A",
-          first_name: "A"
-        },
-        {
-          last_name: "A",
-          first_name: "B"
-        }
-      ]
-
-      sorted = FileProcess.sort(names)
-
-      expect(sorted[0][:last_name]).to eq "A"
-      expect(sorted[0][:first_name]).to eq "A"
-      expect(sorted[1][:last_name]).to eq "A"
-      expect(sorted[1][:first_name]).to eq "B"
-      expect(sorted[2][:last_name]).to eq "A"
-      expect(sorted[2][:first_name]).to eq "C"
-    end
-  end
-
-  describe "write" do
-
-    it "creates a file and writes the names" do
-
-      names = [
-        {
-          last_name: "A",
-          first_name: "C"
-        },
-        {
-          last_name: "A",
-          first_name: "A"
-        }
-      ]
-
-      filename = "spec_output.txt"
-      FileProcess.write(names, filename)
-
-      reader = File.read(filename)
-      expect(reader[0..2].to_s).to eq "A,C"
-      expect(reader[4..6].to_s).to eq "A,A"
-    end
-  end
-
 end
